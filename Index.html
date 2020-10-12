@@ -1,0 +1,124 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>Moving JS API 4x Popups</title>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <style>
+        html, body, #viewDiv {
+            padding: 0;
+            margin: 0;
+            height: 100%;
+            width: 100%;
+        }
+
+      
+#popupContainerDiv {
+  max-height: 0px !important; }
+
+.hiddenPopupCallout {
+  visibility: hidden !important; }
+
+.esri-popup__header-container {
+  pointer-events: none; }
+
+.esri-popup__footer, .esri-popup__header {
+  cursor: move; }
+
+        }
+
+     
+
+        #titleSpan
+        {
+            font-weight: 700;
+            font-size: 34px;
+            
+        }
+
+  .esri-popup__header-container, .esri-popup__footer {
+            background-color: #65a9c2;
+        }
+    </style>
+
+    <link rel="stylesheet" href="https://js.arcgis.com/4.16/esri/themes/light/main.css">
+    <script src="https://js.arcgis.com/4.16/"></script>
+
+    <script>
+
+        require([
+            "esri/Map",
+            "esri/views/MapView",
+            "esri/layers/FeatureLayer",
+            "esri/widgets/Popup",
+            "esri/PopupTemplate",
+            'dojo/dnd/Moveable',
+            'dojo/query',
+            'dojo/on',
+            "dojo/dom",
+            'dojo/dom-class'
+        ], function (Map, MapView, FeatureLayer, Popup, PopupTemplateMoveable,
+            query,
+            on, dom,
+            domClass) {
+
+            var map = new Map({
+                basemap: "gray-vector"
+            });
+           
+                popupAllFields = new Popup();                 ;
+                popupAllFields.collapseEnabled = false;
+                popupAllFields.container = document.getElementById("popupContainerDiv");
+
+                popupAllFields.defaultPopupTemplateEnabled = true;
+
+                popupAllFields.dockOptions = {
+                    buttonEnabled: false                 
+                };
+
+            var view = new MapView({
+                container: "viewDiv",
+                map: map,
+                center: [-118.80500, 34.02700],
+                zoom: 13,
+                visible: true,
+                popup: popupAllFields
+            });
+             //    
+          
+
+
+            var trailheadsLayer = new FeatureLayer({
+                url:
+                    "https://services3.arcgis.com/GVgbJbqm8hXASVYi/arcgis/rest/services/Trails_Styled/FeatureServer/0"
+ 
+          });
+
+            map.add(trailheadsLayer);
+
+         
+           $(function () {
+            $("#popupContainerDiv").draggable({
+                cancel: "article *", opacity: 0.9, drag: function () {
+                    $('.esri-popup__pointer').remove();
+
+                } } );
+        });
+
+
+           
+
+
+        });
+    </script>
+</head>
+<body>
+   
+    <div id="viewDiv">
+
+    </div>
+    <div id="popupContainerDiv" class="ui-widget-content drag"></div>
+</body>
+</html>
